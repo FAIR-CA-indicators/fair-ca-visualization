@@ -3,8 +3,8 @@ from pathlib import Path
 
 import pandas as pd
 import plotly.express as px
-from fairvis import DATA_PATH
-from fairvis.console import console
+from settings import DATA_PATH
+from console import console
 import numpy as np
 from plotly.subplots import make_subplots
 

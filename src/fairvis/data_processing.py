@@ -59,7 +59,7 @@ def load_indicators(xlsx_path: Path) -> Dict[str, pd.DataFrame]:
 
 
 if __name__ == "__main__":
-    from fairvis import DATA_PATH
+    from settings import DATA_PATH
     xlsx_path: Path = DATA_PATH / "FAIR_model_indicators_mkoenig.xlsx"
     dfs: Dict[str, pd.DataFrame] = load_indicators(xlsx_path)
     for model_id, df in dfs.items():
