@@ -4,6 +4,7 @@ import pandas as pd
 import streamlit as st
 from pathlib import Path
 from settings import DATA_PATH
+from visualization import visualize_model
 
 st.set_page_config(
     page_title="FAIR-CA-Indicators",
@@ -40,7 +41,11 @@ def load_data() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]:
 
     models: Dict[str, pd.DataFrame] = {}
     for model_id in df_models.ID.values:
-        models[model_id] = pd.read_csv(DATA_PATH / f"{model_id}.csv")
+        df_model = pd.read_csv(DATA_PATH / f"{model_id}.csv")
+        del df_model["Description"]
+        del df_model["Assessment details"]
+        del df_model["Comment"]
+        models[model_id] = df_model
 
     return df_indicators, models
 
@@ -76,17 +81,24 @@ with tab_about:
     )
 
 with tab_indicators:
-    st.dataframe(df_indicators)
-    # Bar Chart column for indicators!
+    st.dataframe(df_indicators, use_container_width=True)
+    # FIXME: Bar Chart column for indicators!
 
 with tab_models:
-    selected_model_id = st.selectbox(
+    model_id = st.selectbox(
         "Select model",
         index=0,
         options=list(models.keys()),
     )
-    df_model = models[selected_model_id]
-    st.dataframe(df_model)
+    df_model = models[model_id]
+
+    # plotly plot
+    fig = visualize_model(df_data=df_model, model_id=model_id)
+    st.plotly_chart(fig)
+
+    # show dataframe
+
+    st.dataframe(df_model, use_container_width=True)
 
 
 # row = df[df.sim_key == simulation_id]

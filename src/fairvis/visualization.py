@@ -10,7 +10,10 @@ from plotly.subplots import make_subplots
 
 
 def visualize_model(df_data, model_id):
-    """Visualize single model"""
+    """Visualize single model.
+
+    Returns figure.
+    """
     console.rule(f"Visualize: {model_id}")
     console.print(df_data)
 
@@ -43,7 +46,8 @@ def visualize_model(df_data, model_id):
         title=model_id,
         showlegend=True
     )
-    fig.show()
+    return fig
+
 
 
 if __name__ == "__main__":
@@ -52,4 +56,5 @@ if __name__ == "__main__":
 
     model_id = "BioModels_curated"
     df = pd.read_csv(DATA_PATH / f"{model_id}.csv")
-    visualize_model(df, model_id=model_id)
+    fig = visualize_model(df, model_id=model_id)
+    fig.show()
