@@ -8,49 +8,33 @@ from fairvis.console import console
 import numpy as np
 from plotly.subplots import make_subplots
 
-def create_df_polar(df, model_id) -> pd.DataFrame:
-    """Creates polar dataframe for visualization."""
-    # https://plotly.com/python-api-reference/generated/plotly.express.bar_polar.html
-    df_polar = df[["ID", "Category", model_id]]
-    df_polar.rename(columns={model_id: "assessment"}, inplace=True)
-    n_indicators = len(df_polar)
 
-    # add polar coordinates for direction (calculate from number of indicators)
-    theta_part = 360*n_indicators/(n_indicators+1)
-    df_polar["theta"] = np.linspace(start=0, stop=360, num=n_indicators)
-    # radial position (calculate from assessment)
-    df_polar["r"] = df_polar["assessment"]
-    # df_polar["r"] = np.linspace(start=0, stop=n_indicators-1, num=n_indicators)
-    # get different colors
-    df_polar["color"] = "tab:blue"
-    console.print(df_polar)
-    return df_polar
-
-
-def visualize_model(df, model_id):
+def visualize_model(df_data, model_id):
     """Visualize single model"""
-    # TODO: split into archive and model categories
-    # TODO: title of page
-
     console.rule(f"Visualize: {model_id}")
-    df_polar = create_df_polar(df, model_id)
+    console.print(df_data)
 
-    # multiple subplot;
-    # df = px.data.wind()
-    # fig = px.bar_polar(df, r="frequency", theta="direction",
-    #                   color="strength", template="plotly_dark",
-    #                   color_discrete_sequence=px.colors.sequential.Plasma_r)
-    # FIXME: add titles and column titles
-    fig = make_subplots(rows=1, cols=2, specs=[[{"type": "polar"}, {"type": "polar"}]])
-    # necessary to set the polar plots
+    keys = ["Model", "Model metadata", "Archive", "Archive metadata"]
+    fig = make_subplots(
+        rows=1, cols=4,
+        column_titles=keys,
+        specs=[[{"type": "polar"}, {"type": "polar"}, {"type": "polar"}, {"type": "polar"}]]
+    )
     # FIXME: add hover information
-    fig.add_barpolar(df_polar, r=df_polar["r"], theta=df_polar["ID"], #color=df_polar["Category"],
-                       # template="plotly_dark",
-                     row=1, col=1)
-    fig.add_barpolar(df_polar, r=df_polar["r"], theta=df_polar["ID"],
-                     # color=df_polar["Category"],
-                     # template="plotly_dark",
-                     row=1, col=2)
+    # FIXME: add color
+
+
+    dfs = [df_data[df_data["Type"] == key] for key in keys]
+    for k, df in enumerate(dfs):
+        fig.add_barpolar(
+            df,
+            r=df["Assessment"],
+            theta=df["Short"],  # fillcolor=df_polar["Category"],
+            # template="plotly_dark",
+            opacity=0.9,
+            row=1, col=k+1
+        )
+
     #fig.add_barpolar(df_polar, r="r", theta="ID", color="Category",
     #                 template="plotly_dark", row=1, col=2)
     # fig = px.bar_polar(df_polar, r="r", theta="ID", color="Category",
@@ -62,13 +46,10 @@ def visualize_model(df, model_id):
     fig.show()
 
 
-
 if __name__ == "__main__":
-    csv_path: Path = DATA_PATH / "FAIR_model_indicators_mkoenig.csv"
-    df = pd.read_csv(csv_path)
-    console.print(df)
-    model_ids = [c for c in df.columns if c not in {'ID', 'Category', 'Subcategory', 'Priority', 'Indicator', 'Description',
-       'Assessment details'}]
-    console.print(model_ids)
+    df_models = pd.read_csv(DATA_PATH / "models.csv")
+    df_indicators = pd.read_csv(DATA_PATH / "indicators.csv")
 
-    visualize_model(df, model_ids[0])
+    model_id = "BioModels_curated"
+    df = pd.read_csv(DATA_PATH / f"{model_id}.csv")
+    visualize_model(df, model_id=model_id)
