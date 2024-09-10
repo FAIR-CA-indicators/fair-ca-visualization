@@ -75,29 +75,56 @@ df_indicators, models = load_data()
 
 
 # --- Main ----------------------------------------------------------------------------
-tab_about, tab_indicators, tab_models = st.tabs(["About", "Indicators", "Models"])
+st.markdown(
+    """
+    # FAIR COMBINE Archive Indicators
+    """
+)
+tab_about, tab_models, tab_indicators = st.tabs(["About", "Models", "Indicators"])
 
 with tab_about:
     st.markdown(
         """
-        # FAIR COMBINE Archive Indicators
-        ## Goals
-        - Achieve Community-consensus on FAIR indicators
-        - Develop FAIR evaluation guidelines
-        - Implement a FAIR evaluation tool
+        Computational models are essential tools for studying complex systems which,
+        particularly in clinical settings, need to be quality-approved and transparent.
+        A community-driven approach to enhance the transparency and communication of
+        model features is adherence to the principles of Findability, Accessibility,
+        Interoperability and Reusability (FAIR). We propose here an adaptation of the
+        FAIR indicators published by the Research Data Alliance to assess the
+        FAIRness of models encoded in domain-specific standards, such as those
+        established by [COMBINE](https://co.mbine.org).
 
-        ## Reference
-        **Optimising research through FAIRification of computational models in biology**.
+        ## Example visualization
+        The following demonstrates the Model and Model metadata indicators for the
+        BioModels_C19_curated example. To browse the FAIR indicators for the example
+        models select the **Models Tab** above.
+        To browse the indicators select the **Indicators Tab** above.
+        """
+    )
+    figs_example, _ = visualize_model(df_data=models["BioModels_C19_curated"],
+                                      model_id=["BioModels_C19_curated"])
+    col1a, col2a = st.columns(2)
+    with col1a:
+        st.plotly_chart(figs_example[0])
+    with col2a:
+        st.plotly_chart(figs_example[1])
+    st.html(
+        """
+        <h2>Reference</h2>
+        <strong>Optimising research through FAIRification of computational models in biology</strong></br>
 
-        Irina Balaur1, David Nickerson2, Danielle Welter1, Judith A.H. Wodke3, Francois Ancien1, Tom Gebhardt3, Valentin Grouès1, Henning Hermjakob4, Matthias König5, Nicole Radde6, Adrien Rougny1, Reinhard Schneider1, Rahuman Sheriff4, Kirubel Biruk Shiferaw3, Melanie Stefan7, Venkata Satagopam1, Dagmar Waltemath3
+        Irina Balaur<sup>1</sup>, David Nickerson<sup>2</sup>, Danielle Welter<sup>1</sup>, Judith A.H. Wodke<sup>3</sup>, Francois Ancien<sup>1</sup>, Tom Gebhardt<sup>3</sup>, Valentin Grouès<sup>1</sup>, Henning Hermjakob<sup>4</sup>, Matthias König<sup>5</sup>, Nicole Radde<sup>6</sup>, Adrien Rougny<sup>1</sup>, Reinhard Schneider<sup>1</sup>, Rahuman Sheriff<sup>4</sup>, Kirubel Biruk Shiferaw<sup>3</sup>, Melanie Stefan<sup>7</sup>, Venkata Satagopam<sup>1</sup>, Dagmar Waltemath<sup>3</sup></br>
 
-        1 Luxembourg Centre for Systems Biomedicine (LCSB), University of Luxembourg, Luxembourg
-        2 Auckland Bioengineering Institute, University of Auckland, New Zealand
-        3 Medical Informatics Laboratory, University Medicine Greifswald, Germany
-        4 European Molecular Biology Laboratory, European Bioinformatics Institute (EMBL-EBI), UK
-        5 Institute for Biology, Institute for Theoretical Biology, Humboldt University of Berlin, Germany
-        6 Institute for Stochastics and Applications, University Stuttgart, Germany
-        7 Medical School Berlin, Berlin, Germany
+        <sup>1</sup> Luxembourg Centre for Systems Biomedicine (LCSB), University of Luxembourg, Luxembourg</br>
+        <sup>2</sup> Auckland Bioengineering Institute, University of Auckland, New Zealand</br>
+        <sup>3</sup> Medical Informatics Laboratory, University Medicine Greifswald, Germany</br>
+        <sup>4</sup> European Molecular Biology Laboratory, European Bioinformatics Institute (EMBL-EBI), UK</br>
+        <sup>5</sup> Institute for Biology, Institute for Theoretical Biology, Humboldt University of Berlin, Germany</br>
+        <sup>6</sup> Institute for Stochastics and Applications, University Stuttgart, Germany</br>
+        <sup>7</sup> Medical School Berlin, Berlin, Germany</br>
+
+        <h2>Funding</h2>
+        Matthias König was supported by the BMBF within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
         """
     )
 
@@ -125,43 +152,24 @@ with tab_models:
     df_model = models[model_id]
 
     # plotly plot
-    fig = visualize_model(df_data=df_model, model_id=model_id)
-    st.plotly_chart(fig)
+    figs, keys = visualize_model(df_data=df_model, model_id=model_id)
+    col1, col2 = st.columns(2)
+    with col1:
+        st.plotly_chart(figs[0])
+    with col2:
+        st.plotly_chart(figs[1])
+    col3, col4 = st.columns(2)
+    with col3:
+        st.plotly_chart(figs[2])
+    with col4:
+        st.plotly_chart(figs[3])
 
     # show dataframe
-
     st.dataframe(df_model, use_container_width=True)
 
-
-# row = df[df.sim_key == simulation_id]
-# visualize_model(df, model_id=model_id)
-
-# st.markdown(f"**simulation**: `{simulation_id}`, **pattern**: `{row.pattern_name.values[0]}`, **substrate flow**: `Sv{row.boundary_flow_key.values[0]}`")
-#
-# # video rendering
-# url = f"https://github.com/matthiaskoenig/spt-app/raw/main/data/{simulation_id}_h264.mp4"
-# video_placeholder = st.empty()
-# video_html = f"""
-#     <video width="80%" controls="false" autoplay loop="true" align="middle">
-#       <source src="{url}" type="video/mp4" />
-#       Your browser does not support the video tag.
-#     </video>
-# """
-# video_placeholder.empty()
-# time.sleep(1.0)
-# video_placeholder.markdown(video_html, unsafe_allow_html=True)
-# st.divider()
-#
-# # image
-# def render_img_html(image_b64):
-#     st.markdown(f"<img style='max-width: 80%;max-height: 100%;' src='data:image/png;base64, {image_b64}'/>", unsafe_allow_html=True)
-#
-# def image_to_base64(image_path):
-#     image = cv2.imread(image_path, cv2.IMREAD_UNCHANGED)
-#     _, encoded_image = cv2.imencode(".png", image)
-#     base64_image = base64.b64encode(encoded_image.tobytes()).decode("utf-8")
-#     return base64_image
-#
-#
-# image_path = data_path / f"{simulation_id}.png"
-# render_img_html(image_to_base64(str(image_path)))
+st.divider()
+st.markdown(
+    """
+    © 2024 Matthias König, https://github.com/FAIR-CA-indicators/fair-ca-visualization
+    """
+)
