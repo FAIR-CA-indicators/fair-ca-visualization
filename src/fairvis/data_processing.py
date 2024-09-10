@@ -15,7 +15,7 @@ def load_indicators(xlsx_path: Path) -> Dict[str, pd.DataFrame]:
     indicator_ids = {v for v in df_indicators.ID.values}
     df_indicators.set_index("ID", inplace=True)
     console.rule("Indicators", style="white")
-    console.print(df_indicators)
+    # console.print(df_indicators)
     console.rule("Models", style="white")
     df_models = dfs["models"]
     console.print(df_models)

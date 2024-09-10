@@ -2,8 +2,10 @@ from typing import Tuple, Dict
 
 import pandas as pd
 import streamlit as st
+import numpy as np
 from pathlib import Path
 from settings import DATA_PATH
+from console import console
 from visualization import visualize_model
 
 st.set_page_config(
@@ -39,6 +41,7 @@ def load_data() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]:
     del df_indicators["Description"]
     del df_indicators["Assessment details"]
 
+    assessments = [[0.0, 0.0, 0.0, 0.0] for _ in range(len(df_indicators))]
     models: Dict[str, pd.DataFrame] = {}
     for model_id in df_models.ID.values:
         df_model = pd.read_csv(DATA_PATH / f"{model_id}.csv")
@@ -46,6 +49,24 @@ def load_data() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]:
         del df_model["Assessment details"]
         del df_model["Comment"]
         models[model_id] = df_model
+
+        # Count classes
+        for k, value in enumerate(df_model["Assessment"].values):
+            console.print(f"{value}, {type(value)}")
+            if np.isnan(value):
+                k_class = 0
+            elif value == 0.0:
+                k_class = 1
+            elif value == 0.5:
+                k_class = 2
+            elif value == 1.0:
+                k_class = 3
+
+            assessments[k][k_class] = assessments[k][k_class] + 1.0
+
+    # add assessment to indicators
+    df_indicators["Assessment"] = assessments
+    console.print(df_indicators)
 
     return df_indicators, models
 
@@ -81,8 +102,19 @@ with tab_about:
     )
 
 with tab_indicators:
-    st.dataframe(df_indicators, use_container_width=True)
-    # FIXME: Bar Chart column for indicators!
+    st.dataframe(
+        data=df_indicators,
+        use_container_width=True,
+        column_config={
+            "Assessment": st.column_config.BarChartColumn(
+                "FAIR Assessment",
+                help="Assessment of all models (NA, 0.0, 0.5, 1.0)",
+                # y_min=0,
+                # y_max=1,
+            ),
+        },
+    )
+
 
 with tab_models:
     model_id = st.selectbox(
