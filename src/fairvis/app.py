@@ -110,8 +110,11 @@ with tab_about:
         st.plotly_chart(figs_example[1])
 
     st.markdown(
-        """## Assess your model
-        To assess your model select the **Assess your Model Tab**
+        """
+        ## Assess your model
+
+        To assess your model select the **Assess your Model Tab**. We provide a
+        template with instructions from https://github.com/FAIR-CA-indicators/fair-ca-visualization/raw/main/data/template.xlsx.
         """
     )
     st.html(
@@ -174,7 +177,16 @@ with tab_models:
     st.dataframe(df_model, use_container_width=True)
 
 with tab_assessment:
+    st.html(
+        """
+        The template for assessment is available here: <strong><a href="https://github.com/FAIR-CA-indicators/fair-ca-visualization/raw/main/data/FAIR_assessment_template.xlsx" target="_blank">FAIR_assessment_template.xlsx</a></strong>.
 
+        Fill out the assessment column and upload the assessment below.
+        """
+    )
+    st.file_uploader("Upload FAIR model assessment", type=None, accept_multiple_files=False, key=None, help=None,
+                     on_change=None, args=None, kwargs=None, disabled=False,
+                     label_visibility="visible")
 
 st.divider()
 st.markdown(
