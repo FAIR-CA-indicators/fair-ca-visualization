@@ -80,7 +80,7 @@ st.markdown(
     # FAIR COMBINE Archive Indicators
     """
 )
-tab_about, tab_models, tab_indicators = st.tabs(["About", "Models", "Indicators"])
+tab_about, tab_models, tab_indicators, tab_assessment = st.tabs(["About", "Models", "Indicators", "Assess your Model"])
 
 with tab_about:
     st.markdown(
@@ -108,6 +108,12 @@ with tab_about:
         st.plotly_chart(figs_example[0])
     with col2a:
         st.plotly_chart(figs_example[1])
+
+    st.markdown(
+        """## Assess your model
+        To assess your model select the **Assess your Model Tab**
+        """
+    )
     st.html(
         """
         <h2>Reference</h2>
@@ -166,6 +172,9 @@ with tab_models:
 
     # show dataframe
     st.dataframe(df_model, use_container_width=True)
+
+with tab_assessment:
+
 
 st.divider()
 st.markdown(
