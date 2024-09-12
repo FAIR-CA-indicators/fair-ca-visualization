@@ -3,11 +3,9 @@ from typing import Tuple, Dict
 
 import pandas as pd
 import streamlit as st
-import numpy as np
-from pathlib import Path
-from settings import DATA_PATH
 from console import console
 from visualization import visualize_model
+from data_io import load_indicators, load_model_assessments, load_assessment
 
 st.set_page_config(
     page_title="FAIR-CA-Indicators",
@@ -33,12 +31,14 @@ st.markdown("""
         </style>
         """, unsafe_allow_html=True)
 
+
 @st.cache_data
 def load_data() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]:
     """Load data."""
+    df_models = load_model_assessments()
+    df_indicators = load_indicators(df_models=df_models)
 
-
-    return df_indicators, models
+    return df_indicators, df_models
 
 
 df_indicators, models = load_data()
@@ -71,8 +71,7 @@ with tab_about:
         To browse the indicators select the **Indicators Tab** above.
         """
     )
-    figs_example, _ = visualize_model(df_data=models["BioModels_C19_curated"],
-                                      model_id=["BioModels_C19_curated"])
+    figs_example, _ = visualize_model(df_data=models["BioModels_C19_curated"])
     col1a, col2a = st.columns(2)
     with col1a:
         st.plotly_chart(figs_example[0])
@@ -84,7 +83,7 @@ with tab_about:
         ## Assess your model
 
         To assess your model select the **Assess your Model Tab**. We provide a
-        template with instructions from https://github.com/FAIR-CA-indicators/fair-ca-visualization/raw/main/data/template.xlsx.
+        template with instructions from https://github.com/FAIR-CA-indicators/fair-ca-visualization/raw/main/data/FAIR_assessment_template.xlsx.
         """
     )
     st.html(
@@ -115,8 +114,6 @@ with tab_indicators:
             "Assessment": st.column_config.BarChartColumn(
                 "FAIR Assessment",
                 help="Assessment of all models (NA, 0.0, 0.5, 1.0)",
-                # y_min=0,
-                # y_max=1,
             ),
         },
     )
@@ -131,7 +128,7 @@ with tab_models:
     df_model = models[model_id]
 
     # plotly plot
-    figs, keys = visualize_model(df_data=df_model, model_id=model_id)
+    figs, keys = visualize_model(df_data=df_model)
     col1, col2 = st.columns(2)
     with col1:
         st.plotly_chart(figs[0])
@@ -154,20 +151,21 @@ with tab_assessment:
         Fill out the assessment column and upload the assessment below.
         """
     )
-    uploaded_file = st.file_uploader("Upload FAIR model assessment", type="xlsx", accept_multiple_files=False,
-                     key=None, help=None,
-                     on_change=None, args=None, kwargs=None, disabled=False,
-                     label_visibility="visible")
+    uploaded_xlsx = st.file_uploader(
+        "Upload FAIR model assessment",
+        type="xlsx", accept_multiple_files=False,
+        key=None, help=None,
+        on_change=None, args=None, kwargs=None, disabled=False,
+        label_visibility="visible"
+    )
 
-    if uploaded_file is not None:
+    if uploaded_xlsx is not None:
 
         # Can be used wherever a "file-like" object is accepted:
-        df_model = pd.read_excel(uploaded_file, sheet_name=None)
-
-        # TODO: validation & standard format.
+        df_model = load_assessment(uploaded_xlsx)
 
         # plotly plot
-        figs, keys = visualize_model(df_data=df_model, model_id=model_id)
+        figs, keys = visualize_model(df_data=df_model)
         col1, col2 = st.columns(2)
         with col1:
             st.plotly_chart(figs[0])

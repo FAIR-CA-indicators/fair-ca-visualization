@@ -1,9 +1,11 @@
 """Scripts for data IO, processing and validation."""
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 
+import numpy as np
 import pandas as pd
-from fairvis.console import console
+from settings import DATA_PATH
+from console import console
 
 
 def _load_indicators(xlsx_path: Path) -> Dict[str, pd.DataFrame]:
@@ -63,31 +65,27 @@ def load_model_assessments() -> Dict[str, pd.DataFrame]:
     assessment_dir: Path = DATA_PATH / "assessments"
     df_dict: Dict[str, pd.DataFrame] = {}
     for f_xlsx in assessment_dir.glob("*.xlsx"):
-        model_id, df = load_assessment(f_xlsx)
+        model_id = f_xlsx.stem
+        df = load_assessment(f_xlsx)
         df_dict[model_id] = df
 
     return df_dict
 
 
-def create_indicator_df(df_models: Dict[str, pd.DataFrame]) -> pd.DataFrame:
+def load_indicators(df_models: Dict[str, pd.DataFrame]) -> pd.DataFrame:
     """"""
+    template_path: Path = DATA_PATH / "FAIR_assessment_template.xlsx"
 
+    df_indicators = pd.read_excel(template_path, sheet_name=0)
 
-
-    # FIXME: load indicators from template
-    df_indicators = pd.read_csv(DATA_PATH / "indicators.csv")
     df_indicators.set_index("ID", inplace=True)
     del df_indicators["Description"]
     del df_indicators["Assessment details"]
+    del df_indicators["Assessment"]
+    del df_indicators["Comment"]
 
     assessments = [[0.0, 0.0, 0.0, 0.0] for _ in range(len(df_indicators))]
-    models: Dict[str, pd.DataFrame] = {}
-    for model_id in df_models.ID.values:
-        df_model = pd.read_csv(DATA_PATH / f"{model_id}.csv")
-        del df_model["Description"]
-        del df_model["Assessment details"]
-        del df_model["Comment"]
-        models[model_id] = df_model
+    for model_id, df_model in df_models.items():
 
         # Count classes
         for k, value in enumerate(df_model["Assessment"].values):
@@ -107,14 +105,15 @@ def create_indicator_df(df_models: Dict[str, pd.DataFrame]) -> pd.DataFrame:
     df_indicators["Assessment"] = assessments
     # console.print(df_indicators)
 
+    return df_indicators
 
-def load_assessment(xlsx_path: Path) -> Tuple[str, pd.DataFrame]:
+
+def load_assessment(xlsx_path: Path) -> pd.DataFrame:
     """Load assessment from file."""
-    model_id = xlsx_path.stem
     df = pd.read_excel(xlsx_path, sheet_name=0)
     validate_assessment(df=df)
 
-    return model_id, df
+    return df
 
 
 def validate_assessment(df: pd.DataFrame) -> None:
@@ -131,10 +130,10 @@ if __name__ == "__main__":
     # dfs: Dict[str, pd.DataFrame] = _load_indicators(xlsx_path)
 
     df_models = load_model_assessments()
-    for model_id, df in df_models.items():
-        console.rule(model_id, align="left", style="blue")
-        console.print(df)
+    # for model_id, df in df_models.items():
+    #     console.rule(model_id, align="left", style="blue")
+    #     console.print(df)
 
-    df_indicator = create_indicator_df(df_models)
+    df_indicator = load_indicators(df_models)
     console.rule("Indicators", align="left", style="red")
     console.print(df_indicator)
