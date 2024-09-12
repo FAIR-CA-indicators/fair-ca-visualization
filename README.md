@@ -30,8 +30,7 @@ mkvirtualenv fairvis --python=python3.12
 pip install -r requirements.txt
 ```
 
-
-Start the application
+Run the application
 ```bash
 streamlit run src/fairvis/app.py
 ```

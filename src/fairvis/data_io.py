@@ -6,7 +6,7 @@ from typing import Dict
 import numpy as np
 import pandas as pd
 from console import console
-from settings import TEMPLATE_PATH
+from settings import DATA_PATH, TEMPLATE_PATH
 
 
 def load_model_assessments() -> Dict[str, pd.DataFrame]:
@@ -73,8 +73,6 @@ def validate_assessment(df: pd.DataFrame) -> None:
 
 
 if __name__ == "__main__":
-    from settings import DATA_PATH
-
     df_models = load_model_assessments()
 
     df_indicator = load_indicators(df_models)
