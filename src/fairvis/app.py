@@ -102,6 +102,9 @@ with tab_about:
         <sup>6</sup> Institute for Stochastics and Applications, University Stuttgart, Germany</br>
         <sup>7</sup> Medical School Berlin, Berlin, Germany</br>
 
+        <h2>How to cite</h2>
+        <a href="https://doi.org/10.5281/zenodo.13755820"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg" alt="DOI"></a>
+
         <h2>Funding</h2>
         Matthias König was supported by the BMBF within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
         """

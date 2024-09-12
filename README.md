@@ -13,9 +13,7 @@ The visualization tool is available from: https://faircombine.streamlit.app/
 [![./docs/fair-ca-example.png](./docs/fair-ca-example.png)](https://faircombine.streamlit.app/)
 
 # How to cite
-.. image:: https://zenodo.org/badge/55952847.svg
-   :target: https://zenodo.org/badge/latestdoi/55952847
-   :alt: Zenodo DOI
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg)](https://doi.org/10.5281/zenodo.13755820)
 
 # Local installation
 The app has been implemented as streamlit application and can be run locally.
