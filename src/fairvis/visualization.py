@@ -16,7 +16,7 @@ def visualize_model(df_data, model_id) -> List:
     Returns figure.
     """
     console.rule(f"Visualize: {model_id}")
-    console.print(df_data)
+    # console.print(df_data)
 
     keys = ["Model", "Model metadata", "Archive", "Archive metadata"]
     # fig = make_subplots(

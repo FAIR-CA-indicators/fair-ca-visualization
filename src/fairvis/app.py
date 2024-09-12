@@ -1,3 +1,4 @@
+
 from typing import Tuple, Dict
 
 import pandas as pd
@@ -35,38 +36,7 @@ st.markdown("""
 @st.cache_data
 def load_data() -> Tuple[pd.DataFrame, Dict[str, pd.DataFrame]]:
     """Load data."""
-    df_models = pd.read_csv(DATA_PATH / "models.csv")
-    df_indicators = pd.read_csv(DATA_PATH / "indicators.csv")
-    df_indicators.set_index("ID", inplace=True)
-    del df_indicators["Description"]
-    del df_indicators["Assessment details"]
 
-    assessments = [[0.0, 0.0, 0.0, 0.0] for _ in range(len(df_indicators))]
-    models: Dict[str, pd.DataFrame] = {}
-    for model_id in df_models.ID.values:
-        df_model = pd.read_csv(DATA_PATH / f"{model_id}.csv")
-        del df_model["Description"]
-        del df_model["Assessment details"]
-        del df_model["Comment"]
-        models[model_id] = df_model
-
-        # Count classes
-        for k, value in enumerate(df_model["Assessment"].values):
-            console.print(f"{value}, {type(value)}")
-            if np.isnan(value):
-                k_class = 0
-            elif value == 0.0:
-                k_class = 1
-            elif value == 0.5:
-                k_class = 2
-            elif value == 1.0:
-                k_class = 3
-
-            assessments[k][k_class] = assessments[k][k_class] + 1.0
-
-    # add assessment to indicators
-    df_indicators["Assessment"] = assessments
-    console.print(df_indicators)
 
     return df_indicators, models
 
@@ -190,21 +160,27 @@ with tab_assessment:
                      label_visibility="visible")
 
     if uploaded_file is not None:
-        # To read file as bytes:
-        bytes_data = uploaded_file.getvalue()
-        st.write(bytes_data)
-
-        # To convert to a string based IO:
-        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-        st.write(stringio)
-
-        # To read file as string:
-        string_data = stringio.read()
-        st.write(string_data)
 
         # Can be used wherever a "file-like" object is accepted:
-        dataframe = pd.read_csv(uploaded_file)
-        st.write(dataframe)
+        df_model = pd.read_excel(uploaded_file, sheet_name=None)
+
+        # TODO: validation & standard format.
+
+        # plotly plot
+        figs, keys = visualize_model(df_data=df_model, model_id=model_id)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.plotly_chart(figs[0])
+        with col2:
+            st.plotly_chart(figs[1])
+        col3, col4 = st.columns(2)
+        with col3:
+            st.plotly_chart(figs[2])
+        with col4:
+            st.plotly_chart(figs[3])
+
+        # show dataframe
+        st.dataframe(df_model, use_container_width=True)
 
 st.divider()
 st.markdown(
