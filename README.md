@@ -15,15 +15,18 @@ The visualization tool is available from: https://faircombine.streamlit.app/
 # Local installation
 The app has been implemented as streamlit application and can be run locally.
 
+Clone the repository
+```bash
+git clone https://github.com/matthiaskoenig/fair-ca-visualization.git
+cd fair-ca-visualization
+```
+
 Setup virtual environment and install the dependencies
 ```bash
 mkvirtualenv fairvis --python=python3.12
 pip install -r requirements.txt
 ```
-Clone the repository
-```bash
-git clone https://github.com/matthiaskoenig/fair-ca-visualization.git
-```
+
 
 Start the application
 ```bash

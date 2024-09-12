@@ -9,36 +9,88 @@ from console import console
 import numpy as np
 from plotly.subplots import make_subplots
 
+subset_keys = ["Model", "Model metadata", "Archive", "Archive metadata"]
+color_discrete_sequence=[
+    '#1f77b4',  # muted blue
+    '#ff7f0e',  # safety orange
+    '#2ca02c',  # cooked asparagus green
+    '#d62728',  # brick red
+    '#9467bd',  # muted purple
+    '#8c564b',  # chestnut brown
+    '#e377c2',  # raspberry yogurt pink
+    '#7f7f7f',  # middle gray
+    '#bcbd22',  # curry yellow-green
+    '#17becf'  # blue-teal
+]
 
-def visualize_model(df_data: pd.DataFrame) -> List:
-    """Visualize single model.
+def visualize_barplot(df_data: pd.DataFrame) -> List:
+    """Visualize overall fair assessment as bar plot.
 
-    Returns figure.
+    Return figure.
+    """
+    # Count the fraction of indicators fullfilled per category
+    categories = df_data["Category"].unique()
+
+    values = {k: 0 for k in categories}
+    totals = {k: 0 for k in categories}
+    for key, row in df_data.iterrows():
+        category = row["Category"]
+        assessment = row["Assessment"]
+        totals[category] += 1.0
+        if np.isnan(assessment):
+            continue
+        else:
+            values[category] += assessment
+
+    items = []
+    for category in categories:
+        items.append({
+            "category": category,
+            "value": values[category],
+            "total": totals[category],
+            "percentage": 100 * values[category]/totals[category],
+        })
+
+    df = pd.DataFrame(items)
+    # console.print(df)
+
+    # barplot
+    fig = px.bar(
+        df, x="category", y="percentage",
+        color="category",  # title="FAIR assessment",
+        color_discrete_sequence=color_discrete_sequence,
+        labels=dict(category="Category", percentage="FAIR [%]")
+    )
+    fig.update_layout(
+        title="FAIR assessment",
+        yaxis_range=[0, 100],
+        showlegend=False,
+        height=250,
+    )
+
+    return fig
+
+
+def visualize_polar_barplots(df_data: pd.DataFrame) -> List:
+    """Visualize single model as polar bar plots.
+
+    Indicators are split based on Model/Archive and metadata.
+
+    Return polar figures.
     """
 
-    keys = ["Model", "Model metadata", "Archive", "Archive metadata"]
     figs = []
-    dfs = [df_data[df_data["Type"] == key] for key in keys]
+    dfs = [df_data[df_data["Type"] == key] for key in subset_keys]
+    # polar barplots
     for k, df in enumerate(dfs):
-        key = keys[k]
+        key = subset_keys[k]
 
         fig = px.bar_polar(
             df, r="Assessment", theta="Short",
             color="Category",
-            hover_name="ID",
-            hover_data=["Indicator", "Category", "Priority"], # "Description", "Priority"
-            color_discrete_sequence=[
-                '#1f77b4',  # muted blue
-                '#ff7f0e',  # safety orange
-                '#2ca02c',  # cooked asparagus green
-                '#d62728',  # brick red
-                '#9467bd',  # muted purple
-                '#8c564b',  # chestnut brown
-                '#e377c2',  # raspberry yogurt pink
-                '#7f7f7f',  # middle gray
-                '#bcbd22',  # curry yellow-green
-                '#17becf'  # blue-teal
-            ]
+            hover_name="Indicator",
+            hover_data=["Indicator", "Category", "Priority"],  # "Description", "Priority"
+            color_discrete_sequence=color_discrete_sequence,
         )
         fig.update_layout(
             title=key,
@@ -50,14 +102,4 @@ def visualize_model(df_data: pd.DataFrame) -> List:
         )
         figs.append(fig)
 
-    return figs, keys
-
-
-if __name__ == "__main__":
-    df_models = pd.read_csv(DATA_PATH / "models.csv")
-    df_indicators = pd.read_csv(DATA_PATH / "indicators.csv")
-
-    model_id = "BioModels_curated"
-    df = pd.read_csv(DATA_PATH / f"{model_id}.csv")
-    figs, keys = visualize_model(df)
-    figs[0].show()
+    return figs

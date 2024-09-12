@@ -1,10 +1,14 @@
+"""FAIR COMBINE indicator app.
 
+Webapp for FAIR indicators.
+"""
 from typing import Tuple, Dict
 
 import pandas as pd
 import streamlit as st
 from console import console
-from visualization import visualize_model
+from settings import TEMPLATE_PATH
+from visualization import visualize_polar_barplots, visualize_barplot
 from data_io import load_indicators, load_model_assessments, load_assessment
 
 st.set_page_config(
@@ -71,7 +75,7 @@ with tab_about:
         To browse the indicators select the **Indicators Tab** above.
         """
     )
-    figs_example, _ = visualize_model(df_data=models["BioModels_C19_curated"])
+    figs_example = visualize_polar_barplots(df_data=models["BioModels_C19_curated"])
     col1a, col2a = st.columns(2)
     with col1a:
         st.plotly_chart(figs_example[0])
@@ -119,15 +123,21 @@ with tab_indicators:
 
 
 with tab_models:
-    model_id = st.selectbox(
-        "Select model",
-        index=0,
-        options=list(models.keys()),
-    )
-    df_model = models[model_id]
+    col_select, col_fair, _ = st.columns(3)
+    with col_select:
+        model_id = st.selectbox(
+            "Select model",
+            index=0,
+            options=list(models.keys()),
+        )
+        df_model = models[model_id]
+
+    with col_fair:
+        fig_bar = visualize_barplot(df_data=df_model)
+        st.plotly_chart(fig_bar, use_container_width=False)
 
     # plotly plot
-    figs, keys = visualize_model(df_data=df_model)
+    figs = visualize_polar_barplots(df_data=df_model)
     col1, col2 = st.columns(2)
     with col1:
         st.plotly_chart(figs[0])
@@ -143,28 +153,40 @@ with tab_models:
     st.dataframe(df_model, use_container_width=True)
 
 with tab_assessment:
-    st.html(
-        """
-        The template for assessment is available here: <strong><a href="https://github.com/FAIR-CA-indicators/fair-ca-visualization/raw/main/data/FAIR_assessment_template.xlsx" target="_blank">FAIR_assessment_template.xlsx</a></strong>.
+    col_upload, col_template, col_fair_upload = st.columns(3, gap="medium")
+    with col_upload:
+        uploaded_xlsx = st.file_uploader(
+            "Upload FAIR model assessment",
+            type="xlsx", accept_multiple_files=False,
+            key=None, help=None,
+            on_change=None, args=None, kwargs=None, disabled=False,
+            label_visibility="visible"
+        )
+        if uploaded_xlsx is None:
+            df_model_upload = None
 
-        Fill out the assessment column and upload the assessment below.
-        """
-    )
-    uploaded_xlsx = st.file_uploader(
-        "Upload FAIR model assessment",
-        type="xlsx", accept_multiple_files=False,
-        key=None, help=None,
-        on_change=None, args=None, kwargs=None, disabled=False,
-        label_visibility="visible"
-    )
+        else:
+            # Can be used wherever a "file-like" object is accepted:
+            df_model_upload = load_assessment(uploaded_xlsx)
+
+    with col_template:
+        st.html(
+            """
+            The template for assessment is available here:
+            """
+        )
+        with open(TEMPLATE_PATH, 'rb') as f:
+            st.download_button('Download FAIR Template', f, file_name='FAIR_assessment_template.xlsx',
+                               help="FAIR assessment template. Fill out and reupload for evaluation.")
+    with col_fair_upload:
+        if df_model_upload is not None:
+            fig_bar = visualize_barplot(df_data=df_model_upload)
+            st.plotly_chart(fig_bar, use_container_width=False)
+
 
     if uploaded_xlsx is not None:
-
-        # Can be used wherever a "file-like" object is accepted:
-        df_model = load_assessment(uploaded_xlsx)
-
         # plotly plot
-        figs, keys = visualize_model(df_data=df_model)
+        figs = visualize_polar_barplots(df_data=df_model_upload)
         col1, col2 = st.columns(2)
         with col1:
             st.plotly_chart(figs[0])
@@ -177,7 +199,7 @@ with tab_assessment:
             st.plotly_chart(figs[3])
 
         # show dataframe
-        st.dataframe(df_model, use_container_width=True)
+        st.dataframe(df_model_upload, use_container_width=True)
 
 st.divider()
 st.markdown(

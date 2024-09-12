@@ -4,7 +4,7 @@ from typing import List, Dict, Tuple, Optional
 
 import numpy as np
 import pandas as pd
-from settings import DATA_PATH
+from settings import DATA_PATH, TEMPLATE_PATH
 from console import console
 
 
@@ -74,9 +74,7 @@ def load_model_assessments() -> Dict[str, pd.DataFrame]:
 
 def load_indicators(df_models: Dict[str, pd.DataFrame]) -> pd.DataFrame:
     """"""
-    template_path: Path = DATA_PATH / "FAIR_assessment_template.xlsx"
-
-    df_indicators = pd.read_excel(template_path, sheet_name=0)
+    df_indicators = pd.read_excel(TEMPLATE_PATH, sheet_name=0)
 
     df_indicators.set_index("ID", inplace=True)
     del df_indicators["Description"]
@@ -111,6 +109,10 @@ def load_indicators(df_models: Dict[str, pd.DataFrame]) -> pd.DataFrame:
 def load_assessment(xlsx_path: Path) -> pd.DataFrame:
     """Load assessment from file."""
     df = pd.read_excel(xlsx_path, sheet_name=0)
+    df.set_index("ID", inplace=True)
+    del df["Description"]
+    del df["Assessment details"]
+    # del df["Comment"]
     validate_assessment(df=df)
 
     return df
