@@ -183,6 +183,6 @@ with tab_assessment:
 st.divider()
 st.markdown(
     """
-    © 2024 Matthias König, https://github.com/FAIR-CA-indicators/fair-ca-visualization
+    © 2024 Matthias König, https://github.com/matthiaskoenig/fair-ca-visualization
     """
 )

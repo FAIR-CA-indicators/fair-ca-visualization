@@ -8,12 +8,31 @@ FAIR indicators published by the Research Data Alliance to assess the
 FAIRness of models encoded in domain-specific standards, such as those
 established by [COMBINE](https://co.mbine.org).
 
+The visualization tool is available from: https://faircombine.streamlit.app/
 
-License
-=======
 
-* Source Code: `LGPLv3 <http://opensource.org/licenses/LGPL-3.0>`__
-* Documentation: `CC BY-SA 4.0 <http://creativecommons.org/licenses/by-sa/4.0/>`__
+# Local installation
+The app has been implemented as streamlit application and can be run locally.
+
+Setup virtual environment and install the dependencies
+```bash
+mkvirtualenv fairvis --python=python3.12
+pip install -r requirements.txt
+```
+Clone the repository
+```bash
+git clone https://github.com/matthiaskoenig/fair-ca-visualization.git
+```
+
+Start the application
+```bash
+streamlit run src/fairvis/app.py
+```
+
+# License
+
+* Source Code: [LGPLv3](http://opensource.org/licenses/LGPL-3.0)
+* Documentation: [CC BY-SA 4.0](http://creativecommons.org/licenses/by-sa/4.0/)
 
 The fair-ca-visualization source is released under both the GPL and LGPL licenses version 2 or
 later. You may choose which license you choose to use the software under.
@@ -38,16 +57,4 @@ QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resectio
 A Systems Medicine Approach) by grant number 436883643 and by grant number 
 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
-## Installation
-Setup virtual environment and install the dependencies
-
-```bash
-mkvirtualenv fairvis --python=python3.12
-pip install -r requirements.txt
-```
-
-## Start app
-```bash
-streamlit run app.py
-```
 © 2021-2024 Matthias König
