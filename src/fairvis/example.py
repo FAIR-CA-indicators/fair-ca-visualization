@@ -1,4 +1,5 @@
 """Example to test visualization."""
+
 import pandas as pd
 from settings import DATA_PATH
 from visualization import visualize_polar_barplots, visualize_barplot

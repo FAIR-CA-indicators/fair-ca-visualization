@@ -1,10 +1,10 @@
 """Scripts for data IO, processing and validation."""
 from pathlib import Path
-from typing import List, Dict, Tuple, Optional
+from typing import Dict
 
 import numpy as np
 import pandas as pd
-from settings import DATA_PATH, TEMPLATE_PATH
+from settings import TEMPLATE_PATH
 from console import console
 
 
@@ -38,11 +38,11 @@ def load_indicators(df_models: Dict[str, pd.DataFrame]) -> pd.DataFrame:
             # console.print(f"{value}, {type(value)}")
             if np.isnan(value):
                 k_class = 0
-            elif value == 0.0:
+            elif np.isclose(value, 0.0):
                 k_class = 1
-            elif value == 0.5:
+            elif np.isclose(value, 0.5):
                 k_class = 2
-            elif value == 1.0:
+            elif np.isclose(value, 1.0):
                 k_class = 3
 
             assessments[k][k_class] = assessments[k][k_class] + 1.0
@@ -68,7 +68,6 @@ def load_assessment(xlsx_path: Path) -> pd.DataFrame:
 
 def validate_assessment(df: pd.DataFrame) -> None:
     """Validate assessment."""
-    # load indicators from template and assert that everything exists;
     pass
 
 
