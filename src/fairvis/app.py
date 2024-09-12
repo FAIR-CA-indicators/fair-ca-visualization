@@ -82,8 +82,7 @@ with tab_about:
         """
         ## Assess your model
 
-        To assess your model select the **Assess your Model Tab**. We provide a
-        template with instructions from https://github.com/FAIR-CA-indicators/fair-ca-visualization/raw/main/data/FAIR_assessment_template.xlsx.
+        To assess your model select the **Assess your Model Tab**.
         """
     )
     st.html(

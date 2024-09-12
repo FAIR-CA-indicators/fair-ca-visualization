@@ -10,6 +10,7 @@ established by [COMBINE](https://co.mbine.org).
 
 The visualization tool is available from: https://faircombine.streamlit.app/
 
+![./docs/fair-ca-example.png](./docs/fair-ca-example.png)
 
 # Local installation
 The app has been implemented as streamlit application and can be run locally.
