@@ -12,6 +12,11 @@ The visualization tool is available from: https://faircombine.streamlit.app/
 
 [![./docs/fair-ca-example.png](./docs/fair-ca-example.png)](https://faircombine.streamlit.app/)
 
+# How to cite
+.. image:: https://zenodo.org/badge/55952847.svg
+   :target: https://zenodo.org/badge/latestdoi/55952847
+   :alt: Zenodo DOI
+
 # Local installation
 The app has been implemented as streamlit application and can be run locally.
 
@@ -50,8 +55,7 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-Funding
-=======
+# Funding
 Matthias König (MK) was supported by the Federal Ministry of Education and Research 
 (BMBF, Germany) within the research network Systems Medicine of the Liver 
 (LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of 
