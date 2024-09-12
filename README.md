@@ -54,7 +54,7 @@ Funding
 =======
 Matthias König (MK) was supported by the Federal Ministry of Education and Research 
 (BMBF, Germany) within the research network Systems Medicine of the Liver 
-(**LiSyM**, grant number 031L0054). MK is supported by the Federal Ministry of 
+(LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of 
 Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and 
 by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 
 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - 

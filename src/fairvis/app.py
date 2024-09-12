@@ -6,7 +6,6 @@ from typing import Tuple, Dict
 
 import pandas as pd
 import streamlit as st
-from console import console
 from settings import TEMPLATE_PATH
 from visualization import visualize_polar_barplots, visualize_barplot
 from data_io import load_indicators, load_model_assessments, load_assessment
@@ -15,7 +14,6 @@ st.set_page_config(
     page_title="FAIR-CA-Indicators",
     page_icon="🧊",
     layout="wide",
-    # initial_sidebar_state="expanded",
     menu_items={
         "Get help": "mailto:konigmatt@googlemail.com",
         "Report a bug": "https://github.com/FAIR-CA-indicators/fair-ca-visualization.git/issues/new",
