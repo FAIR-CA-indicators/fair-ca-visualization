@@ -53,7 +53,7 @@ df_indicators, models = load_data()
 # --- Main ----------------------------------------------------------------------------
 st.markdown(
     """
-    # FAIR COMBINE Archive Indicators
+    # FAIR COMBINE Archive Indicators Visualization
     """
 )
 tab_about, tab_models, tab_indicators, tab_assessment = st.tabs(
@@ -71,6 +71,8 @@ with tab_about:
         FAIR indicators published by the Research Data Alliance to assess the
         FAIRness of models encoded in domain-specific standards, such as those
         established by [COMBINE](https://co.mbine.org).
+
+        The FAIR COMBINE Archive Indicators project is available from [https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io](https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io).
 
         ## Example visualization
         The following demonstrates the Model and Model metadata indicators for the
@@ -95,7 +97,7 @@ with tab_about:
     )
     st.html(
         """
-        <h2>Reference</h2>
+        <h2>Contributors</h2>
         <strong>Optimising research through FAIRification of computational models in biology</strong></br>
 
         Irina Balaur<sup>1</sup>, David Nickerson<sup>2</sup>, Danielle Welter<sup>1</sup>, Judith A.H. Wodke<sup>3</sup>, Francois Ancien<sup>1</sup>, Tom Gebhardt<sup>3</sup>, Valentin Grouès<sup>1</sup>, Henning Hermjakob<sup>4</sup>, Matthias König<sup>5</sup>, Nicole Radde<sup>6</sup>, Adrien Rougny<sup>1</sup>, Reinhard Schneider<sup>1</sup>, Rahuman Sheriff<sup>4</sup>, Kirubel Biruk Shiferaw<sup>3</sup>, Melanie Stefan<sup>7</sup>, Venkata Satagopam<sup>1</sup>, Dagmar Waltemath<sup>3</sup></br>
@@ -108,7 +110,7 @@ with tab_about:
         <sup>6</sup> Institute for Stochastics and Applications, University Stuttgart, Germany</br>
         <sup>7</sup> Medical School Berlin, Berlin, Germany</br>
 
-        <h2>How to cite</h2>
+        <h2>How to cite this tool</h2>
         <a href="https://doi.org/10.5281/zenodo.13755820" target="_blank"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.13755820.svg" alt="DOI"></a>
 
         <h2>Funding</h2>

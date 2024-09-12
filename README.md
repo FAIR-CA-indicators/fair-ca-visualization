@@ -8,6 +8,8 @@ FAIR indicators published by the Research Data Alliance to assess the
 FAIRness of models encoded in domain-specific standards, such as those
 established by [COMBINE](https://co.mbine.org).
 
+The FAIR COMBINE Archive Indicators project is available from [https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io](https://github.com/FAIR-CA-indicators/FAIR-CA-indicators.github.io).
+
 The visualization tool is available from: https://faircombine.streamlit.app/
 
 [![./docs/fair-ca-example.png](./docs/fair-ca-example.png)](https://faircombine.streamlit.app/)
