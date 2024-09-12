@@ -184,9 +184,27 @@ with tab_assessment:
         Fill out the assessment column and upload the assessment below.
         """
     )
-    st.file_uploader("Upload FAIR model assessment", type=None, accept_multiple_files=False, key=None, help=None,
+    uploaded_file = st.file_uploader("Upload FAIR model assessment", type="xlsx", accept_multiple_files=False,
+                     key=None, help=None,
                      on_change=None, args=None, kwargs=None, disabled=False,
                      label_visibility="visible")
+
+    if uploaded_file is not None:
+        # To read file as bytes:
+        bytes_data = uploaded_file.getvalue()
+        st.write(bytes_data)
+
+        # To convert to a string based IO:
+        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+        st.write(stringio)
+
+        # To read file as string:
+        string_data = stringio.read()
+        st.write(string_data)
+
+        # Can be used wherever a "file-like" object is accepted:
+        dataframe = pd.read_csv(uploaded_file)
+        st.write(dataframe)
 
 st.divider()
 st.markdown(
