@@ -10,7 +10,7 @@ established by [COMBINE](https://co.mbine.org).
 
 The visualization tool is available from: https://faircombine.streamlit.app/
 
-![./docs/fair-ca-example.png](./docs/fair-ca-example.png)
+[![./docs/fair-ca-example.png](./docs/fair-ca-example.png)](https://faircombine.streamlit.app/)
 
 # Local installation
 The app has been implemented as streamlit application and can be run locally.
@@ -58,4 +58,4 @@ QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resectio
 A Systems Medicine Approach) by grant number 436883643 and by grant number 
 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
-© 2021-2024 Matthias König
+© 2024 Matthias König
