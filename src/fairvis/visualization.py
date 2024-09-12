@@ -1,27 +1,29 @@
 """Create plots for the indicators."""
+
 from pathlib import Path
 from typing import List
 
+import numpy as np
 import pandas as pd
 import plotly.express as px
-from settings import DATA_PATH
 from console import console
-import numpy as np
 from plotly.subplots import make_subplots
+from settings import DATA_PATH
 
 subset_keys = ["Model", "Model metadata", "Archive", "Archive metadata"]
-color_discrete_sequence=[
-    '#1f77b4',  # muted blue
-    '#ff7f0e',  # safety orange
-    '#2ca02c',  # cooked asparagus green
-    '#d62728',  # brick red
-    '#9467bd',  # muted purple
-    '#8c564b',  # chestnut brown
-    '#e377c2',  # raspberry yogurt pink
-    '#7f7f7f',  # middle gray
-    '#bcbd22',  # curry yellow-green
-    '#17becf'  # blue-teal
+color_discrete_sequence = [
+    "#1f77b4",  # muted blue
+    "#ff7f0e",  # safety orange
+    "#2ca02c",  # cooked asparagus green
+    "#d62728",  # brick red
+    "#9467bd",  # muted purple
+    "#8c564b",  # chestnut brown
+    "#e377c2",  # raspberry yogurt pink
+    "#7f7f7f",  # middle gray
+    "#bcbd22",  # curry yellow-green
+    "#17becf",  # blue-teal
 ]
+
 
 def visualize_barplot(df_data: pd.DataFrame) -> List:
     """Visualize overall fair assessment as bar plot.
@@ -44,22 +46,26 @@ def visualize_barplot(df_data: pd.DataFrame) -> List:
 
     items = []
     for category in categories:
-        items.append({
-            "category": category,
-            "value": values[category],
-            "total": totals[category],
-            "percentage": 100 * values[category]/totals[category],
-        })
+        items.append(
+            {
+                "category": category,
+                "value": values[category],
+                "total": totals[category],
+                "percentage": 100 * values[category] / totals[category],
+            }
+        )
 
     df = pd.DataFrame(items)
     # console.print(df)
 
     # barplot
     fig = px.bar(
-        df, x="category", y="percentage",
+        df,
+        x="category",
+        y="percentage",
         color="category",  # title="FAIR assessment",
         color_discrete_sequence=color_discrete_sequence,
-        labels=dict(category="Category", percentage="FAIR [%]")
+        labels=dict(category="Category", percentage="FAIR [%]"),
     )
     fig.update_layout(
         title="FAIR assessment",
@@ -86,10 +92,16 @@ def visualize_polar_barplots(df_data: pd.DataFrame) -> List:
         key = subset_keys[k]
 
         fig = px.bar_polar(
-            df, r="Assessment", theta="Short",
+            df,
+            r="Assessment",
+            theta="Short",
             color="Category",
             hover_name="Indicator",
-            hover_data=["Indicator", "Category", "Priority"],  # "Description", "Priority"
+            hover_data=[
+                "Indicator",
+                "Category",
+                "Priority",
+            ],  # "Description", "Priority"
             color_discrete_sequence=color_discrete_sequence,
         )
         fig.update_layout(

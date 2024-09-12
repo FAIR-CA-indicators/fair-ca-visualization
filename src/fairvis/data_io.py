@@ -1,11 +1,12 @@
 """Scripts for data IO, processing and validation."""
+
 from pathlib import Path
 from typing import Dict
 
 import numpy as np
 import pandas as pd
-from settings import TEMPLATE_PATH
 from console import console
+from settings import TEMPLATE_PATH
 
 
 def load_model_assessments() -> Dict[str, pd.DataFrame]:

@@ -2,13 +2,14 @@
 
 Webapp for FAIR indicators.
 """
-from typing import Tuple, Dict
+
+from typing import Dict, Tuple
 
 import pandas as pd
 import streamlit as st
+from data_io import load_assessment, load_indicators, load_model_assessments
 from settings import TEMPLATE_PATH
-from visualization import visualize_polar_barplots, visualize_barplot
-from data_io import load_indicators, load_model_assessments, load_assessment
+from visualization import visualize_barplot, visualize_polar_barplots
 
 st.set_page_config(
     page_title="FAIR-CA-Indicators",
@@ -22,7 +23,8 @@ st.set_page_config(
         """,
     },
 )
-st.markdown("""
+st.markdown(
+    """
         <style>
                .block-container {
                     padding-top: 2rem;
@@ -31,7 +33,9 @@ st.markdown("""
                     padding-right: 5rem;
                 }
         </style>
-        """, unsafe_allow_html=True)
+        """,
+    unsafe_allow_html=True,
+)
 
 
 @st.cache_data
@@ -52,7 +56,9 @@ st.markdown(
     # FAIR COMBINE Archive Indicators
     """
 )
-tab_about, tab_models, tab_indicators, tab_assessment = st.tabs(["About", "Models", "Indicators", "Assess your Model"])
+tab_about, tab_models, tab_indicators, tab_assessment = st.tabs(
+    ["About", "Models", "Indicators", "Assess your Model"]
+)
 
 with tab_about:
     st.markdown(
@@ -158,10 +164,15 @@ with tab_assessment:
     with col_upload:
         uploaded_xlsx = st.file_uploader(
             "Upload FAIR model assessment",
-            type="xlsx", accept_multiple_files=False,
-            key=None, help=None,
-            on_change=None, args=None, kwargs=None, disabled=False,
-            label_visibility="visible"
+            type="xlsx",
+            accept_multiple_files=False,
+            key=None,
+            help=None,
+            on_change=None,
+            args=None,
+            kwargs=None,
+            disabled=False,
+            label_visibility="visible",
         )
         if uploaded_xlsx is None:
             df_model_upload = None
@@ -176,14 +187,17 @@ with tab_assessment:
             The template for assessment is available here:
             """
         )
-        with open(TEMPLATE_PATH, 'rb') as f:
-            st.download_button('Download FAIR Template', f, file_name='FAIR_assessment_template.xlsx',
-                               help="FAIR assessment template. Fill out and reupload for evaluation.")
+        with open(TEMPLATE_PATH, "rb") as f:
+            st.download_button(
+                "Download FAIR Template",
+                f,
+                file_name="FAIR_assessment_template.xlsx",
+                help="FAIR assessment template. Fill out and reupload for evaluation.",
+            )
     with col_fair_upload:
         if df_model_upload is not None:
             fig_bar = visualize_barplot(df_data=df_model_upload)
             st.plotly_chart(fig_bar, use_container_width=False)
-
 
     if uploaded_xlsx is not None:
         # plotly plot

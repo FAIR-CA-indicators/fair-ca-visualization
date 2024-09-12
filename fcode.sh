@@ -1,6 +1,3 @@
-# format code
-isort src/pymetadata
-black src/pymetadata
-
-isort tests
-black tests
+# reformat code
+isort src/fairvis
+black src/fairvis
